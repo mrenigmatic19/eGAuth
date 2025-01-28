@@ -10,7 +10,7 @@ const server2 = 'http://localhost:9000';
 const server = http.createServer((req, res) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   
-  if (req.url.startsWith('/api')) {
+  if (req.url.startsWith('/v')) {
     console.log('Routing to Server 1');
     proxy.web(req, res, { target: server1 }, (err) => {
       console.error('Error routing to Server 1:', err);
