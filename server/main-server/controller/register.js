@@ -41,26 +41,4 @@ const userRegister = async (req, res) => {
     }
 };
 
-const pastScan = async (req, res) => {
-    try {
-        const { userAdhar, employeeID } = req.body;
-
-        if (!userAdhar || !employeeID) {
-            return res.status(400).json({ error: 'userAdhar and employeeID are required' });
-        }
-
-        const data = await allscans.find({ userAdhar, employeeID });
-
-        if (!data.length) {
-            return res.status(404).json({ message: 'No scans found for the given userAdhar and employeeID' });
-        }
-
-        res.status(200).json({ scans: data });
-    } catch (err) {
-        console.error('Error fetching scans:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
-
 module.exports = { userRegister };

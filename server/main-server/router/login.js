@@ -1,15 +1,13 @@
 const express=require('express')
 const router=express.Router()
+const {userLogin,empLogin,deptLogin}=require('../controller/login')
 
+router.get('/userLogin',userLogin)
+router.get('/deptLogin',deptLogin)
+router.get('/empLogin',empLogin)
 
-router.get('/home',)
-router.get('/user',)
-router.get('/dept',)
-router.get('/official',)
-
-router.post('/home',)
-router.post('/user',)
-router.post('/dept',)
-router.post('/official',)
+router.post('/userLogin',userLogin)
+router.post('/deptLogin',deptLogin)
+router.post('/empLogin',empLogin)
 
 module.exports=router

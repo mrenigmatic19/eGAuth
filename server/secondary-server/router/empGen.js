@@ -2,7 +2,6 @@ const express=require('express')
 const router=express.Router()
 
 
-router.get('/scan',)
-router.post('/scan',)
+router.post('/scan',authenticateJWT)
 
 module.exports=router
