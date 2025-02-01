@@ -1,25 +1,28 @@
-const express=require('express')
-const router=express.Router()
-const {authenticateJWT}=require('../middleware/auth')
+const express = require("express");
+const router = express.Router();
 
-router.get('/home',)
-router.get('/dept',authenticateJWT)
+// Import authentication middleware
+const { authAdminJWT, authDeptJWT, authEmpJWT, authUserJWT } = require("../middleware/auth");
 
-router.get('/user',authenticateJWT)
-router.get('/user/scan',authenticateJWT)
-router.get('/user/pastScan',authenticateJWT)
+// Import controllers
+const { addDept, viewDept } = require("../controller/admin");
+const { viewProfile } = require("../controller/employee");
+const { viewEmployee, addEmployee } = require("../controller/dept");
+const { pastScan, userProfile } = require("../controller/user");
 
-router.get('/emp',authenticateJWT)
+// User Routes (Protected)
+router.get("/user", authUserJWT, userProfile);
+router.get("/user/pastScan", authUserJWT, pastScan);
 
-router.get('/admin',authenticateJWT)
-router.get('/admin/addDept',authenticateJWT)
-router.post('/admin/addDept',authenticateJWT)
-router.get('/admin/allDept',authenticateJWT)
+// Employee Routes (Protected)
+router.get("/emp", authEmpJWT, viewProfile);
 
-router.get('/dept',authenticateJWT)
-router.get('/dept/addEmp',authenticateJWT)
-router.post('/dept/addEmp',authenticateJWT)
-router.get('/dept/allEmp',authenticateJWT)
+// Admin Routes (Protected)
+router.post("/admin/addDept", authAdminJWT, addDept);
+router.get("/admin/viewDept", authAdminJWT, viewDept);
 
+// Department Routes 
+router.post("/dept/addEmp", authDeptJWT, addEmployee); 
+router.get("/dept/allEmp", authDeptJWT, viewEmployee); 
 
-module.exports=router
+module.exports = router;

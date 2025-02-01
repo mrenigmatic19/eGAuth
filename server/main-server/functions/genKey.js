@@ -1,7 +1,8 @@
 const crypto = require('crypto');
 const { setupRabbitMQ,getKeyChannel, EXCHANGE_KEY } = require('./rabbitMQ');
+const {encryptWithRSA}=require('./rsaEncode')
 
-
+const rsakey = process.env.RSAPUBLIC;
 function generateAES256Key() {
   return crypto.randomBytes(32).toString('hex'); 
 }
@@ -13,9 +14,9 @@ function generateIV() {
 
 
 async function generateAndPublishKey() {
-  const key = generateAES256Key();
-  const iv = generateIV();
-
+  const key = encryptWithRSA(generateAES256Key(),rsakey);
+  const iv = encryptWithRSA(generateIV(),rsakey);
+  
   const channel = getKeyChannel();
   if (!channel) {
     console.error('RabbitMQ channel is not initialized.');

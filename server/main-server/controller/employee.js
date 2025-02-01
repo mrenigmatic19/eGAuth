@@ -31,5 +31,4 @@ const viewProfile = async (req, res) => {
 
 module.exports = {
   viewProfile,
-  genDigitalID
 };

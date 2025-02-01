@@ -2,28 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const allscans = require('../database/schemas/PastScanSchema');
-const { scanChannel } = require('../function/rabbitMQ');
+const User = require('../database/schemas/UserSchema'); 
 
-// Fetch past scan data based on userAdhar and employeeID
 const pastScan = async (req, res) => {
     try {
-        const { userAdhar, employeeID } = req.body;
-
+        const UserID = req.user.id;
         
-        if (!userAdhar || !employeeID) {
-            return res.status(400).json({ error: 'Both userAdhar and employeeID are required' });
-        }
-
-        // Fetch scan data from the database
-        const data = await allscans.find({ userAdhar, employeeID });
+        
+        const data = await allscans.find({ userID });
 
         // Check if no data is found
         if (!data.length) {
-            return res.status(404).json({ message: 'No scans found for the given userAdhar and employeeID' });
+            return res.status(404).json({ message: 'No scans Till now' });
         }
 
-        // Return the found scan data
-        return res.status(200).json({ scans: data });
+        return res.status(200).json({ scans: data }); 
     } catch (err) {
         console.error('Error fetching scans:', err);
 
@@ -32,16 +25,28 @@ const pastScan = async (req, res) => {
     }
 };
 
-
 const userProfile = async (req, res) => {
     try {
-    
-        res.status(200).json({ message: 'User profile logic not implemented yet' });
+       
+        const UserID = req.user.id;
+        console.log(UserID)
+        
+        const user =await User.findOne({ 
+                   UserID 
+                  });
+      
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Return the user details
+        res.status(200).json({ user });
     } catch (err) {
         console.error('Error fetching user profile:', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 module.exports = {
     pastScan,

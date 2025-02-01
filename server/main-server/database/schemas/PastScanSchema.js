@@ -5,7 +5,8 @@ const ScanSchema = new mongoose.Schema({
     UserAdhar: { type: String, required: true },
     EmpID: { type: String, required: true },
     EmpDeptID: { type: String, required: true },
-    EmpSignature: { type: String, default: '' },
+    EmpSignature: { type: String, default: true },
 });
 
-module.exports = mongoose.model('Employee', ScanSchema);
+
+module.exports=mongoose.model('Scans', ScanSchema);

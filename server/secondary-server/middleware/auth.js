@@ -4,7 +4,7 @@ const User = require('../database/schemas/UserSchema');
 
 const authenticateJWT = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1]; 
-
+  console.log(token)
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }

@@ -7,11 +7,17 @@ const User = require('../database/schemas/UserSchema');
 const Department = require('../database/schemas/DeptSchema');
 
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET;
+const JWT_EMP_SECRET = process.env.JWT_EMP_SECRET;
+const JWT_DEPT_SECRET = process.env.JWT_DEPT_SECRET;
 
 
 const userLogin = async (req, res) => {
-  const { UserID, password } = req.body;
+  const { UserID, Password } = req.body;
+
+  if (!Password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
 
   try {
     const user = await User.findOne({ UserID });
@@ -19,10 +25,23 @@ const userLogin = async (req, res) => {
       return res.status(400).json({ message: 'User not found' });
     }
 
-    if (await bcrypt.compare(password, user.password)) {
-      
-      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-      return res.status(200).json({ message: 'Login successful', token });
+    if (!user.Password) {
+      return res.status(400).json({ message: 'Password not set for user' });
+    }
+
+    const isMatch = await bcrypt.compare(Password, user.Password);
+
+    if (isMatch) {
+
+      if(user.UserID == 'Admin'){
+        const token = jwt.sign({ id: user.UserID }, JWT_ADMIN_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({ message: 'Login successful', token });
+      }
+      else{
+        const token = jwt.sign({ id: user.UserID }, JWT_USER_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({ message: 'Login successful', token });
+      }
+     
     }
 
     return res.status(400).json({ message: 'Incorrect password' });
@@ -31,7 +50,6 @@ const userLogin = async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 const empLogin = async (req, res) => {
   const { EmpID, EmpPassword } = req.body;
@@ -45,7 +63,7 @@ const empLogin = async (req, res) => {
    
     if (await bcrypt.compare(EmpPassword, employee.EmpPassword)) {
      
-      const token = jwt.sign({ id: employee._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ EmpID: employee.EmpID ,EmpName:employee.EmpName}, JWT_EMP_SECRET, { expiresIn: '1h' });
       return res.status(200).json({ message: 'Login successful', token });
     }
 
@@ -61,6 +79,7 @@ const deptLogin = async (req, res) => {
 
   try {
     const department = await Department.findOne({ DeptID });
+    console.log(department);
     if (!department) {
       return res.status(400).json({ message: 'Department not found' });
     }
@@ -68,7 +87,7 @@ const deptLogin = async (req, res) => {
    
     if (await bcrypt.compare(DeptPass, department.DeptPass)) {
       
-      const token = jwt.sign({ id: department._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ DeptID: department.DeptID,DeptName:department.DeptName }, JWT_DEPT_SECRET, { expiresIn: '1h' });
       return res.status(200).json({ message: 'Login successful', token });
     }
 
@@ -79,27 +98,6 @@ const deptLogin = async (req, res) => {
   }
 };
 
-const adminLogin = async (req, res) => {
-    const { UserID, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ UserID });
-      if (!user) {
-        return res.status(400).json({ message: 'Admin not found' });
-      }
-  
-      if (await bcrypt.compare(password, user.password)) {
-        
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-        return res.status(200).json({ message: 'Login successful', token });
-      }
-  
-      return res.status(400).json({ message: 'Incorrect password' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Server error' });
-    }
-  };
 
 module.exports = {
   userLogin,

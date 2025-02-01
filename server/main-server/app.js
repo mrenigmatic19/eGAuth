@@ -1,30 +1,31 @@
 const express = require('express')
-const {setupRabbitMQ,setupConsumer}=require("./functions/genKey")
+require('dotenv').config({path:'./../.env'});
+const {setupRabbitMQ,setupKeyChannel}=require("./functions/genKey")
 
-
-
+require('./database/db')
 const app=express();
-app.use(express.urlencoded({extended:false}))
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: false }));
+ 
 
-(async()=>{
-   
-        try {
-            // Step 1: Setup the connection
-            const connection = await setupRabbitMQ();
-            console.log('Connection established successfully');
-    
-            // Step 2: Setup the consumer
-            await setupConsumer(connection);
-            console.log('Consumer setup successfully');
-        } catch (error) {
-            console.error('Error during initialization:', error);
-        }
-    })()
+(async () => {
+    try {
+        const connection = await setupRabbitMQ();
+        
+        await setupKeyChannel(connection);
+      
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
+})();
 
 
-app.use('/',)
-app.use('/login',)
-app.use('/register',)
+const login=require("./router/login")
+const register=require("./router/register") 
+const main=require("./router/main") 
+app.use("/m",main)
+app.use("/login",login)
+app.use("/register",register)
 
 
 app.listen(8000,()=>{

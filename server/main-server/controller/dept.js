@@ -9,17 +9,16 @@ const addEmployee = async (req, res) => {
         const { 
             EmpID, 
             EmpName, 
-            EmpDeptID, 
-            EmpDeptName, 
-            EmpSignature, 
             EmpPassword, 
             EmpContact, 
             EmpDesignation, 
             EmpPosting 
         } = req.body;
-
+        
+         const { EmpDeptID, 
+            EmpDeptName } = req.user;
       
-        if (!EmpID || !EmpName || !EmpDeptID || !EmpDeptName || !EmpPassword || !EmpContact || !EmpDesignation || !EmpPosting) {
+        if (!EmpID || !EmpName || !EmpPassword || !EmpContact || !EmpDesignation || !EmpPosting) {
             return res.status(400).json({ error: 'All fields are required except EmpSignature' });
         }
 
@@ -58,7 +57,8 @@ const addEmployee = async (req, res) => {
 const viewEmployee = async (req, res) => {
     try {
         // Fetch all employees from the database
-        const allEmployees = await Employee.find({});
+        const {EmpDeptID}=req.qeury
+        const allEmployees = await Employee.find({EmpDeptID});
         
         res.status(200).json({ employees: allEmployees });
     } catch (err) {

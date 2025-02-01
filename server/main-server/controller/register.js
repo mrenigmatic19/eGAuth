@@ -5,31 +5,40 @@ const User = require('../database/schemas/UserSchema');
 
 const userRegister = async (req, res) => {
     try {
-        const { userAdhar, userName, userPassword, userConfirmPass } = req.body;
+        const { UserID,UserAdhar, UserName, Password, userConfirmPass } = req.body;
+        console.log(UserID ,UserAdhar ,UserName ,Password ,userConfirmPass)
 
-
-        if (!userAdhar || !userName || !userPassword || !userConfirmPass) {
+        if (!UserID || !UserAdhar || !UserName || !Password || !userConfirmPass) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        if (userPassword !== userConfirmPass) {
+        if (Password !== userConfirmPass) {
             return res.status(400).json({ error: 'Passwords do not match' });
         }
 
-        
-        const isAlready = await User.findOne({ userAdhar });
+        const isAlready = await User.findOne({ 
+           UserAdhar 
+          });
+            
         if (isAlready) {
             return res.status(400).json({ error: 'User with this Aadhar already exists' });
         }
+        const isAlread= await User.findOne({ 
+            UserID 
+           });
 
+        if (isAlread) {
+            return res.status(400).json({ error: 'User with this ID already exists' });
+        }
         
-        const hashedPassword = await bcrypt.hash(userPassword, 10);
+        const hashedPassword = await bcrypt.hash(Password, 10);
 
         
         const newUser = new User({
-            userAdhar,
-            userName,
-            userPassword: hashedPassword,
+            UserID,
+            UserAdhar,
+            UserName,
+            Password: hashedPassword,
         });
 
         await newUser.save();
