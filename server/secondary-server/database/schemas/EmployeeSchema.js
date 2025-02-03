@@ -12,4 +12,4 @@ const EmployeeSchema = new mongoose.Schema({
     EmpPosting: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Employee', EmployeeSchema);
+module.exports= mongoose.model('Employee', EmployeeSchema);

@@ -17,6 +17,7 @@ const addEmployee = async (req, res) => {
         
          const { EmpDeptID, 
             EmpDeptName } = req.user;
+            console.log(req.user)
       
         if (!EmpID || !EmpName || !EmpPassword || !EmpContact || !EmpDesignation || !EmpPosting) {
             return res.status(400).json({ error: 'All fields are required except EmpSignature' });
@@ -31,7 +32,7 @@ const addEmployee = async (req, res) => {
         
         const hashedPass = await bcrypt.hash(EmpPassword, 10);
 
-        
+         
         const newEmployee = new Employee({
             EmpID,
             EmpName,
@@ -57,7 +58,7 @@ const addEmployee = async (req, res) => {
 const viewEmployee = async (req, res) => {
     try {
         // Fetch all employees from the database
-        const {EmpDeptID}=req.qeury
+        const {EmpDeptID}=req.user
         const allEmployees = await Employee.find({EmpDeptID});
         
         res.status(200).json({ employees: allEmployees });

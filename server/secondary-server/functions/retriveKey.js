@@ -1,4 +1,4 @@
-const { setupConnection, getKeyChannel, EXCHANGE_KEY  } = require('./connection');
+const { setupConnection, getKeyChannel, EXCHANGE_KEY  } = require('./rabbitMQ');
 
 async function setupConsumer() {
   try {

@@ -23,6 +23,6 @@ router.get("/admin/viewDept", authAdminJWT, viewDept);
 
 // Department Routes 
 router.post("/dept/addEmp", authDeptJWT, addEmployee); 
-router.get("/dept/allEmp", authDeptJWT, viewEmployee); 
+router.get("/dept/viewEmp", authDeptJWT, viewEmployee); 
 
 module.exports = router;

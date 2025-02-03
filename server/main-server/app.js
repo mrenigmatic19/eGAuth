@@ -23,9 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 const login=require("./router/login")
 const register=require("./router/register") 
 const main=require("./router/main") 
-app.use("/m",main)
+app.use("/",main)
 app.use("/login",login)
-app.use("/register",register)
+app.use("/register",register) 
 
 
 app.listen(8000,()=>{

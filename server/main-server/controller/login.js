@@ -87,7 +87,7 @@ const deptLogin = async (req, res) => {
    
     if (await bcrypt.compare(DeptPass, department.DeptPass)) {
       
-      const token = jwt.sign({ DeptID: department.DeptID,DeptName:department.DeptName }, JWT_DEPT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ EmpDeptID: department.DeptID, EmpDeptName:department.DeptName }, JWT_DEPT_SECRET, { expiresIn: '1h' });
       return res.status(200).json({ message: 'Login successful', token });
     }
 

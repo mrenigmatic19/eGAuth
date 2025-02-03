@@ -5,13 +5,13 @@ const Employee = require('../database/schemas/EmployeeSchema');
 
 const viewProfile = async (req, res) => {
   try {
-    const { empID } = req.body;
+    const { EmpID } = req.user;
 
-    if (!empID) {
+    if (!EmpID) {
       return res.status(400).json({ error: "Employee ID is required" });
     }
 
-    const empData = await Employee.findOne({ empID });
+    const empData = await Employee.findOne({ EmpID });
 
     if (!empData) {
       return res.status(404).json({ error: "User not found" });
