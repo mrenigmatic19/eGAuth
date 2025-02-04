@@ -14,12 +14,12 @@ const { pastScan, userProfile } = require("../controller/user");
 router.get("/user", authUserJWT, userProfile);
 router.get("/user/pastScan", authUserJWT, pastScan);
 
-// Employee Routes (Protected)
+// Employee Routes (Protected) 
 router.get("/emp", authEmpJWT, viewProfile);
 
 // Admin Routes (Protected)
 router.post("/admin/addDept", authAdminJWT, addDept);
-router.get("/admin/viewDept", authAdminJWT, viewDept);
+router.get("/admin/viewDept", authAdminJWT, viewDept); 
 
 // Department Routes 
 router.post("/dept/addEmp", authDeptJWT, addEmployee); 

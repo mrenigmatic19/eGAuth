@@ -1,8 +1,16 @@
-const { setupConnection, getKeyChannel, EXCHANGE_KEY  } = require('./rabbitMQ');
+const { setupConnection, getKeyChannel, EXCHANGE_KEY } = require('./rabbitMQ');
+const { decryptWithRSA } = require('./rsaDecode');
+
+let key = null;
+let iv = null; // Also store IV globally if needed
 
 async function setupConsumer() {
   try {
     const keyChannel = getKeyChannel();
+    if (!keyChannel) {
+      console.error("RabbitMQ channel not initialized.");
+      return;
+    }
 
     const { queue } = await keyChannel.assertQueue('', { exclusive: true });
 
@@ -15,11 +23,28 @@ async function setupConsumer() {
       queue,
       (msg) => {
         if (msg) {
-          const messageContent = msg.content.toString();
-          console.log('Received message:', messageContent);
+          try {
+            let messageContent = JSON.parse(msg.content.toString('utf-8')); // Convert buffer to string before parsing JSON
+            console.log('Received message:', messageContent);
+            console.log("   Key:", messageContent.key, "    IV:", messageContent.iv);
 
-          // Acknowledge the message
-          keyChannel.ack(msg);
+            // Check if RSA keys are present
+            if (!process.env.RSAPRIVATE) {
+              console.error("RSA Private Key not found in environment variables.");
+              return;
+            }
+
+            // Decrypt AES key and IV
+            key = decryptWithRSA(messageContent.key);
+            iv = decryptWithRSA(messageContent.iv);
+
+            console.log("Decrypted Key:", key, "Decrypted IV:", iv);
+
+            // Acknowledge the message
+            keyChannel.ack(msg);
+          } catch (error) {
+            console.error("Error processing message:", error.message);
+          }
         }
       },
       { noAck: false } // Require manual acknowledgment
@@ -32,4 +57,4 @@ async function setupConsumer() {
   }
 }
 
-module.exports={setupConnection,setupConsumer}
+module.exports = { setupConnection, setupConsumer, key, iv };

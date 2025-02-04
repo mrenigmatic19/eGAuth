@@ -12,7 +12,7 @@ mongoose.connect(uri, {
   useUnifiedTopology: true,  // Optional: Use the new topology engine
 })
 .then(() => {
-  console.log("Successfully connected to MongoDB with Mongoose!");
+  console.log("Successfully connected to MongoDB with Mongoose!"); 
 })
 .catch((err) => {
   console.error("Error connecting to MongoDB:", err);

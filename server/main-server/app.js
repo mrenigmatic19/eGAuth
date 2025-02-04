@@ -24,10 +24,10 @@ const login=require("./router/login")
 const register=require("./router/register") 
 const main=require("./router/main") 
 app.use("/",main)
-app.use("/login",login)
+app.use("/login",login) 
 app.use("/register",register) 
-
-
+ 
+ 
 app.listen(8000,()=>{
     console.log("server is running");
 })

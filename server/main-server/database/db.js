@@ -6,7 +6,7 @@ const db_password = process.env.DB_PASSWORD;
 // MongoDB Atlas connection URI
 const uri = `mongodb+srv://${user}:${db_password}@cluster0.dncvi.mongodb.net/eGAuth?retryWrites=true&w=majority`;
 
-// Mongoose connection setup
+// Mongoose connection setup  
 mongoose.connect(uri, {
   useNewUrlParser: true,  // Optional: Use the new URL parser
   useUnifiedTopology: true,  // Optional: Use the new topology engine

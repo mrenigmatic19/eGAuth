@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
         await setupConsumer(connection);
       
     } catch (error) {
-        console.error('Error during initialization:', error);
+        console.error('Error during initialization:', error); 
     }
 })();
 

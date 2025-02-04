@@ -44,7 +44,7 @@ async function setupKeyChannel() {
   }
   
   // Setup scan channel with retry logic
-  async function setupScanChannel() {
+  async function setupScanChannel() { 
     try {
       scanChannel = await connection.createChannel();
       await scanChannel.assertExchange(EXCHANGE_SCAN, 'fanout', { durable: true });
