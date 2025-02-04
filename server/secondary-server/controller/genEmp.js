@@ -16,7 +16,7 @@ const genEmp = async (req, res) => {
 
         // Generate encrypted data for QR code
         const currentTime = new Date().toISOString(); // Ensure correct timestamp
-        const dataString = key + JSON.stringify(employeeData) + currentTime;
+        const dataString = key+" "+ JSON.stringify(employeeData) +" "+ currentTime;
         const qrData = await encrypt(dataString, key, iv);
         
         // Generate QR Code

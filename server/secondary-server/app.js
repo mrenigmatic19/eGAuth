@@ -20,10 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 })();
 
 
-// const empGen=require("./router/emoGen")
-// const userScan=require("./router/userScan") 
+ const empGen=require("./router/empGen")
+ const userScan=require("./router/userScan") 
 
-   
+app.use("/emp",empGen)
+app.use("/user",userScan)   
 
 app.listen(9000,()=>{
     console.log("server is running")

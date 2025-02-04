@@ -13,9 +13,5 @@ async function generateQR(encryptedText) {
     }
 }
 
-generateQR('Hello World').then((data) => {
-    console.log(data);
-}).catch((err) => {
-    console.error(err);
-});
+
 module.exports = {generateQR};

@@ -1,6 +1,6 @@
 
 const crypto = require('crypto');
-const algorithm = Process.env.ALGORITHM;
+const algorithm = process.env.ALGORITHM;
 
 function encrypt(text, key, iv) {
     let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
@@ -17,6 +17,7 @@ function decrypt(text, key, iv) {
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     return decrypted.toString();
 }
+
 
 
 module.exports = { encrypt, decrypt };

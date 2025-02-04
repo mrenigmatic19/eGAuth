@@ -7,10 +7,7 @@ const db_password = process.env.DB_PASSWORD;
 const uri = `mongodb+srv://${user}:${db_password}@cluster0.dncvi.mongodb.net/eGAuth?retryWrites=true&w=majority`;
 
 // Mongoose connection setup
-mongoose.connect(uri, {
-  useNewUrlParser: true,  // Optional: Use the new URL parser
-  useUnifiedTopology: true,  // Optional: Use the new topology engine
-})
+mongoose.connect(uri)
 .then(() => {
   console.log("Successfully connected to MongoDB with Mongoose!"); 
 })
